@@ -143,6 +143,7 @@ class GeometricFitWidget(QtWidgets.QWidget):
         self._ui.done_pushButton.clicked.connect(self._doneButtonClicked)
         self._ui.stdViews_pushButton.clicked.connect(self._stdViewsButtonClicked)
         self._ui.viewAll_pushButton.clicked.connect(self._viewAllButtonClicked)
+        self._ui.next_pushButton.clicked.connect(self._nextButtonClicked)
 
     def _updateGeneralWidgets(self):
         self._ui.identifier_label.setText("Identifier:  " + self._model.getIdentifier())
@@ -296,6 +297,12 @@ class GeometricFitWidget(QtWidgets.QWidget):
         self._model.done()
         self._ui.dockWidget.setFloating(False)
         self._callback()
+
+    def _nextButtonClicked(self):
+        """Write the model connection codes here...
+        """
+        self._model.nextTime()
+        self._fitter.load()
 
     def _stdViewsButtonClicked(self):
         sceneviewer = self._ui.alignmentsceneviewerwidget.getSceneviewer()

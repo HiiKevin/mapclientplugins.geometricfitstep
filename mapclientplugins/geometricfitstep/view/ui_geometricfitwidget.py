@@ -106,7 +106,7 @@ class Ui_GeometricFitWidget(object):
         self.stepedit_scrollArea.setWidgetResizable(True)
         self.stepedit_scrollAreaWidgetContents = QWidget()
         self.stepedit_scrollAreaWidgetContents.setObjectName(u"stepedit_scrollAreaWidgetContents")
-        self.stepedit_scrollAreaWidgetContents.setGeometry(QRect(0, -100, 845, 1377))
+        self.stepedit_scrollAreaWidgetContents.setGeometry(QRect(0, -318, 324, 606))
         self.verticalLayout_3 = QVBoxLayout(self.stepedit_scrollAreaWidgetContents)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -681,6 +681,13 @@ class Ui_GeometricFitWidget(object):
 
         self.horizontalLayout_2.addWidget(self.stdViews_pushButton)
 
+        self.next_pushButton = QPushButton(self.bottom_frame)
+        self.next_pushButton.setObjectName(u"next_pushButton")
+        sizePolicy5.setHeightForWidth(self.next_pushButton.sizePolicy().hasHeightForWidth())
+        self.next_pushButton.setSizePolicy(sizePolicy5)
+
+        self.horizontalLayout_2.addWidget(self.next_pushButton)
+
         self.done_pushButton = QPushButton(self.bottom_frame)
         self.done_pushButton.setObjectName(u"done_pushButton")
         sizePolicy5.setHeightForWidth(self.done_pushButton.sizePolicy().hasHeightForWidth())
@@ -782,6 +789,7 @@ class Ui_GeometricFitWidget(object):
         self.displaySurfacesWireframe_checkBox.setText(QCoreApplication.translate("GeometricFitWidget", u"Wireframe", None))
         self.viewAll_pushButton.setText(QCoreApplication.translate("GeometricFitWidget", u"View All", None))
         self.stdViews_pushButton.setText(QCoreApplication.translate("GeometricFitWidget", u"Std. Views", None))
+        self.next_pushButton.setText(QCoreApplication.translate("GeometricFitWidget", u"Next Timestep", None))
         self.done_pushButton.setText(QCoreApplication.translate("GeometricFitWidget", u"Done", None))
     # retranslateUi
 

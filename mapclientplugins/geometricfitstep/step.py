@@ -2,7 +2,9 @@
 MAP Client Plugin Step
 """
 import json
-
+import os
+import natsort
+import glob
 from PySide2 import QtGui, QtWidgets
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
@@ -50,10 +52,29 @@ class GeometricFitStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         """
         # Put your execute step code here before calling the '_doneExecution' method.
-        self._model = GeometricFitModel(self._port0_inputZincModelFile, self._port1_inputZincDataFile, self._location, self._config['identifier'])
-        self._view = GeometricFitWidget(self._model)
-        self._view.registerDoneExecution(self._doneExecution)
-        self._setCurrentWidget(self._view)
+        if os.path.isdir(self._port1_inputZincDataFile):
+            files=glob.glob(self._port1_inputZincDataFile+'\\combined*.ex')
+            files=natsort.natsorted(files)
+            for i in range(len(files)):
+                if not os.path.exists(self._location + '\\' + self._config['identifier'] +'\\' + str(i)):
+                    os.makedirs(self._location + '\\' + self._config['identifier'] +'\\' + str(i),exist_ok=True)
+            if len(files) > 0:
+                self._model = GeometricFitModel(self._port0_inputZincModelFile, files, self._location, self._config['identifier'])
+                self._view = GeometricFitWidget(self._model)
+                self._view.registerDoneExecution(self._doneExecution)
+                self._setCurrentWidget(self._view)
+            else:
+                raise Exception('No data input found')
+        else:
+            if not os.path.exists(self._location + '\\' + self._config['identifier'] + '\\0'):
+                os.makedirs(self._location + '\\' + self._config['identifier']+'\\0', exist_ok=True)
+            self._model = GeometricFitModel(self._port0_inputZincModelFile, [self._port1_inputZincDataFile], self._location, self._config['identifier'])
+            self._view = GeometricFitWidget(self._model)
+            self._view.registerDoneExecution(self._doneExecution)
+            self._setCurrentWidget(self._view)
+
+
+        
 
     def setPortData(self, index, dataIn):
         """

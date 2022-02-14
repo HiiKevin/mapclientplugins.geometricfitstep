@@ -29,7 +29,9 @@ class GeometricFitModel(object):
         """
         :param location: Path to folder for mapclient step name.
         """
-        self._fitter = Fitter(inputZincModelFile, inputZincDataFile)
+        self._counter = 0
+        self._frames = inputZincDataFile
+        self._fitter = Fitter(inputZincModelFile, self._frames[0])
         # self._fitter.setDiagnosticLevel(1)
         self._location = os.path.join(location, identifier)
         self._identifier = identifier
@@ -89,10 +91,10 @@ class GeometricFitModel(object):
         defaultTessellation.setRefinementFactors([12])
 
     def _getFitSettingsFileName(self):
-        return self._location + "-settings.json"
+        return self._location + '\\' + str(self._counter) + '\\' + self._identifier + "-settings.json"
 
     def _getDisplaySettingsFileName(self):
-        return self._location + "-display-settings.json"
+        return self._location + '\\' + str(self._counter) + '\\' + self._identifier + "-display-settings.json"
 
     def _loadSettings(self):
         # try:
@@ -120,15 +122,26 @@ class GeometricFitModel(object):
             f.write(json.dumps(self._settings, sort_keys=False, indent=4))
 
     def getOutputModelFileNameStem(self):
-        return self._location
+        return self._location + '\\' + str(self._counter) + '\\' + self._identifier
 
     def getOutputModelFileName(self):
-        return self._location + ".exf"
+        return self._location + '\\' + str(self._counter) + '\\' + self._identifier + ".exf"
 
     def done(self):
         self._saveSettings()
         self._fitter.run(endStep=None, modelFileNameStem=self.getOutputModelFileNameStem())
         self._fitter.writeModel(self.getOutputModelFileName())
+
+    def nextTime(self):
+        if self._counter < len(self._frames) - 1:
+            self._saveSettings()
+            self._fitter.run(endStep=None, modelFileNameStem=self.getOutputModelFileNameStem())
+            self._fitter.writeModel(self.getOutputModelFileName())
+            self._counter = self._counter + 1
+            # update new frame
+            self._fitter.updateModelReferenceCoordinates()
+            self._fitter._zincDataFileName=self._frames[self._counter]
+
 
     def getIdentifier(self):
         return self._identifier
